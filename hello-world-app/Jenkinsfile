@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'us-east-1'
+        CLUSTER    = 'hello-world-cluster'
+        SERVICE    = 'hello-world-service'
+        ECR_REPO   = 'public.ecr.aws/your-alias/hello-world-app'
+        IMAGE_TAG  = "${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/ali-intervest/ecs-jenkins.git'
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh "docker build -t $ECR_REPO:$IMAGE_TAG ./hello-world-app"
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                sh '''
+                aws ecr-public get-login-password \
+                | docker login --username AWS --password-stdin public.ecr.aws
+                '''
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                sh "docker push $ECR_REPO:$IMAGE_TAG"
+            }
+        }
+
+        stage('Deploy to ECS') {
+            steps {
+                sh '''
+                aws ecs update-service \
+                  --cluster $CLUSTER \
+                  --service $SERVICE \
+                  --force-new-deployment
+                '''
+            }
+        }
+    }
+}
+
