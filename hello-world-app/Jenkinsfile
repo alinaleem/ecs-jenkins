@@ -1,7 +1,7 @@
 pipeline {
   agent any
 
-environment {
+  environment {
     AWS_REGION  = 'us-east-1'
     ACCOUNT_ID  = '123456789012'
     CLUSTER     = 'hello-world-cluster'
@@ -9,8 +9,7 @@ environment {
     REPO_NAME   = 'hello-world-app'
     IMAGE_TAG   = "${BUILD_NUMBER}"
     ECR_REPO    = "${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}"
-}
-
+  }
 
   stages {
     stage('Clone') {
@@ -19,33 +18,30 @@ environment {
       }
     }
 
-stage('Build Image') {
-  steps {
-    sh '''
-      echo "Building Docker image..."
-      docker build -t $ECR_REPO:$IMAGE_TAG ./hello-world-app
-    '''
-  }
-}
-
-
-stage('Login to ECR') {
-    steps {
+    stage('Build Image') {
+      steps {
         sh '''
-        echo 'Logging in to Amazon ECR...'
-        aws ecr get-login-password --region us-east-1 \
-        | docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-east-1.amazonaws.com
+          echo "Building Docker image..."
+          docker build -t $ECR_REPO:$IMAGE_TAG ./hello-world-app
         '''
+      }
     }
-}
 
+    stage('Login to ECR') {
+      steps {
+        sh '''
+          echo 'Logging in to Amazon ECR...'
+          aws ecr get-login-password --region $AWS_REGION \
+          | docker login --username AWS --password-stdin $ECR_REPO
+        '''
+      }
+    }
 
     stage('Push to ECR') {
       steps {
         sh '''
           echo "Pushing image to ECR..."
-          sh "docker push $ECR_REPO:$IMAGE_TAG"
-
+          docker push $ECR_REPO:$IMAGE_TAG
         '''
       }
     }
