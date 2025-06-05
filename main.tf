@@ -35,6 +35,7 @@ module "ecs" {
 }
 
 module "ecr" {
-  source    = "./modules/ecr"
-  repo_name = var.repo_name
+  source           = "./modules/ecr"
+  repo_name        = var.repo_name
+  jenkins_role_arn = module.iam.jenkins_role_arn
 }
