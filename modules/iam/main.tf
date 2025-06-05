@@ -43,22 +43,21 @@ resource "aws_iam_policy" "jenkins_ec2_policy" {
       {
         Effect = "Allow",
         Action = [
-          "ecr:GetAuthorizationToken"
-        ],
-        Resource = "*"
-      },
-      {
-        Effect = "Allow",
-        Action = [
           "ecs:UpdateService",
           "ecs:DescribeServices",
           "ecs:DescribeTaskDefinition"
         ],
         Resource = "*"
+      },
+      {
+        Effect   = "Allow",
+        Action   = ["ecr:GetAuthorizationToken"],
+        Resource = "*"
       }
     ]
   })
 }
+
 
 
 resource "aws_iam_role_policy_attachment" "jenkins_policy_attach" {

@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "app" {
 
   container_definitions = jsonencode([
     {
-      name      = "hello-world",
+      name      = "hello-world", # must match load_balancer container_name
       image     = var.image_url,
       essential = true,
       portMappings = [
@@ -59,7 +59,7 @@ resource "aws_ecs_service" "app" {
 
   load_balancer {
     target_group_arn = var.target_group_arn
-    container_name   = "hello-world"
+    container_name   = "hello-world" # Must match container_definitions.name
     container_port   = 80
   }
 
@@ -73,4 +73,3 @@ output "service_name" {
 output "cluster_id" {
   value = aws_ecs_cluster.main.id
 }
-

@@ -1,52 +1,64 @@
 pipeline {
-    agent any
+  agent any
 
-    environment {
-        AWS_REGION = 'us-east-1'
-        CLUSTER    = 'hello-world-cluster'
-        SERVICE    = 'hello-world-service'
-        ECR_REPO   = 'public.ecr.aws/your-alias/hello-world-app'
-        IMAGE_TAG  = "${BUILD_NUMBER}"
-    }
-
-    stages {
-        stage('Clone') {
-            steps {
-                git branch: 'main', url: 'https://github.com/ali-intervest/ecs-jenkins.git'
-            }
-        }
-
-        stage('Build Image') {
-            steps {
-                sh "sudo docker build -t $ECR_REPO:$IMAGE_TAG ./hello-world-app"
-            }
-        }
-
-        stage('Login to ECR') {
-            steps {
-                sh '''
-                aws ecr get-login-password --region us-east-1 \
-                | docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-east-1.amazonaws.com
-                '''
-            }
-        }
-
-        stage('Push to ECR') {
-            steps {
-                sh "sudo docker push $ECR_REPO:$IMAGE_TAG"
-            }
-        }
-
-        stage('Deploy to ECS') {
-            steps {
-                sh '''
-                aws ecs update-service \
-                  --cluster $CLUSTER \
-                  --service $SERVICE \
-                  --force-new-deployment
-                '''
-            }
-        }
-    }
+environment {
+    AWS_REGION  = 'us-east-1'
+    ACCOUNT_ID  = '123456789012'
+    CLUSTER     = 'hello-world-cluster'
+    SERVICE     = 'hello-world-service'
+    REPO_NAME   = 'hello-world-app'
+    IMAGE_TAG   = "${BUILD_NUMBER}"
+    ECR_REPO    = "${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}"
 }
 
+
+  stages {
+    stage('Clone') {
+      steps {
+        git branch: 'main', url: 'https://github.com/ali-intervest/ecs-jenkins.git'
+      }
+    }
+
+    stage('Build Image') {
+      steps {
+        sh '''
+          echo "Building Docker image..."
+          docker build -t $FULL_IMAGE ./hello-world-app
+        '''
+      }
+    }
+
+    stage('Login to ECR') {
+      steps {
+        sh '''
+          echo "Logging in to Amazon ECR..."
+          aws ecr get-login-password --region $AWS_REGION | \
+          docker login --username AWS --password-stdin $ECR_REGISTRY
+        '''
+      }
+    }
+
+    stage('Push to ECR') {
+      steps {
+        sh '''
+          echo "Pushing image to ECR..."
+          sh "docker push $ECR_REPO:$IMAGE_TAG"
+
+        '''
+      }
+    }
+
+    stage('Deploy to ECS') {
+      steps {
+        sh '''
+          echo "Deploying new image to ECS..."
+          aws ecs update-service \
+            --cluster $CLUSTER \
+            --service $SERVICE \
+            --force-new-deployment \
+            --region $AWS_REGION
+        '''
+      }
+    }
+  }
+}

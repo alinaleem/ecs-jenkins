@@ -33,3 +33,8 @@ module "ecs" {
   target_group_arn   = module.alb.target_group_arn
   lb_listener        = module.alb.lb_listener
 }
+
+module "ecr" {
+  source    = "./modules/ecr"
+  repo_name = var.repo_name
+}
