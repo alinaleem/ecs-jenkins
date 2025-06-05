@@ -34,8 +34,10 @@ module "ecs" {
   lb_listener        = module.alb.lb_listener
 }
 
+
 module "ecr" {
-  source           = "./modules/ecr"
-  repo_name        = var.repo_name
-  jenkins_role_arn = module.iam.jenkins_role_arn
+  source            = "./modules/ecr"
+  repo_name         = "hello-world-app"
+  jenkins_role_arn  = module.iam.jenkins_role_arn
 }
+
