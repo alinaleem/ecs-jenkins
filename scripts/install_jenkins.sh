@@ -5,10 +5,11 @@ yum update -y
 yum install -y docker
 systemctl start docker
 systemctl enable docker
-usermod -aG docker jenkins
 sudo usermod -s /bin/bash jenkins
+sudo usermod -aG docker jenkins
+echo "jenkins ALL=(ALL) NOPASSWD: $(which docker)" | sudo tee /etc/sudoers.d/jenkins
 
-reboot
+
 
 sudo yum install git -y
 
@@ -24,3 +25,5 @@ yum install -y jenkins
 
 systemctl enable jenkins
 systemctl start jenkins
+
+reboot

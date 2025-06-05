@@ -5,7 +5,7 @@ pipeline {
         AWS_REGION = 'us-east-1'
         CLUSTER    = 'hello-world-cluster'
         SERVICE    = 'hello-world-service'
-        ECR_REPO   = '123456789012.dkr.ecr.us-east-1.amazonaws.com/hello-world-app'
+        ECR_REPO   = 'public.ecr.aws/your-alias/hello-world-app'
         IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
@@ -33,7 +33,7 @@ pipeline {
 
         stage('Push to ECR') {
             steps {
-                sh "docker push $ECR_REPO:$IMAGE_TAG"
+                sh "sudo docker push $ECR_REPO:$IMAGE_TAG"
             }
         }
 

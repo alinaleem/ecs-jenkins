@@ -49,6 +49,7 @@ resource "aws_instance" "jenkins" {
   instance_type               = "t3.small"
   subnet_id                   = element(var.subnets, 0)
   key_name                    = var.key_name
+  iam_instance_profile        = var.iam_instance_profile
   vpc_security_group_ids      = [aws_security_group.jenkins_sg.id]
   associate_public_ip_address = true
 

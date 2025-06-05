@@ -11,17 +11,18 @@ module "iam" {
 }
 
 module "jenkins_ec2" {
-  source   = "./modules/jenkins_ec2"
-  vpc_id   = module.vpc.vpc_id
-  subnets  = module.vpc.public_subnets
-  key_name = var.key_name
+  source               = "./modules/jenkins_ec2"
+  vpc_id               = module.vpc.vpc_id
+  subnets              = module.vpc.public_subnets
+  iam_instance_profile = module.iam.jenkins_instance_profile_name
+  key_name             = var.key_name
 }
 
 module "alb" {
-  source             = "./modules/alb"
-  subnets            = module.vpc.public_subnets
-  vpc_id             = module.vpc.vpc_id
-  security_group_id  = module.jenkins_ec2.jenkins_sg_id
+  source            = "./modules/alb"
+  subnets           = module.vpc.public_subnets
+  vpc_id            = module.vpc.vpc_id
+  security_group_id = module.jenkins_ec2.jenkins_sg_id
 }
 
 module "ecs" {
