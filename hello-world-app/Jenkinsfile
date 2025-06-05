@@ -19,14 +19,15 @@ environment {
       }
     }
 
-    stage('Build Image') {
-      steps {
-        sh '''
-          echo "Building Docker image..."
-          docker build -t $FULL_IMAGE ./hello-world-app
-        '''
-      }
-    }
+stage('Build Image') {
+  steps {
+    sh '''
+      echo "Building Docker image..."
+      docker build -t $ECR_REPO:$IMAGE_TAG ./hello-world-app
+    '''
+  }
+}
+
 
     stage('Login to ECR') {
       steps {
