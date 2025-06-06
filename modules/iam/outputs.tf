@@ -9,3 +9,7 @@ output "execution_role_arn" {
 output "jenkins_role_arn" {
   value = aws_iam_role.jenkins_ec2_role.arn
 }
+
+output "ecs_instance_profile_name" {
+  value = aws_iam_instance_profile.ecs_instance_profile.name
+}

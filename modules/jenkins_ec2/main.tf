@@ -46,7 +46,7 @@ resource "aws_security_group" "jenkins_sg" {
 
 resource "aws_instance" "jenkins" {
   ami                         = data.aws_ami.amazon_linux.id
-  instance_type               = "t3.small"
+  instance_type               = "t3.medium"
   subnet_id                   = element(var.subnets, 0)
   key_name                    = var.key_name
   iam_instance_profile        = var.iam_instance_profile

@@ -1,3 +1,6 @@
 key_name   = "loginkey"
 aws_region = "us-east-1"
 repo_name  = "hello-world-app"
+image_url  = "827327671383.dkr.ecr.us-east-1.amazonaws.com/hello-world-app:latest"
+account_id = "827327671383"
+region     = "us-east-1"

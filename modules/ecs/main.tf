@@ -1,27 +1,3 @@
-variable "cluster_name" {
-  description = "ECS Cluster name"
-  type        = string
-}
-
-variable "image_url" {
-  description = "Docker image URL"
-  type        = string
-}
-
-variable "execution_role_arn" {
-  description = "IAM role for ECS task execution"
-  type        = string
-}
-
-variable "target_group_arn" {
-  description = "ALB target group ARN"
-  type        = string
-}
-
-variable "lb_listener" {
-  description = "ALB listener dependency"
-}
-
 resource "aws_ecs_cluster" "main" {
   name = var.cluster_name
 }
@@ -66,10 +42,3 @@ resource "aws_ecs_service" "app" {
   depends_on = [var.lb_listener]
 }
 
-output "service_name" {
-  value = aws_ecs_service.app.name
-}
-
-output "cluster_id" {
-  value = aws_ecs_cluster.main.id
-}

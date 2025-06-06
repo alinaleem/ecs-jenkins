@@ -12,3 +12,17 @@ variable "repo_name" {
   type        = string
 }
 
+variable "image_url" {
+  type        = string
+  description = "Full ECR image URL for the container"
+}
+
+variable "account_id" {
+  type        = string
+  description = "AWS Account ID"
+}
+
+variable "region" {
+  type        = string
+  description = "AWS Region"
+}

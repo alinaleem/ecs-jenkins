@@ -17,22 +17,21 @@ resource "aws_ecr_repository_policy" "jenkins_push_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid       = "AllowJenkinsEC2Push",
-        Effect    = "Allow",
+        Sid    = "AllowJenkinsEC2ToPush",
+        Effect = "Allow",
         Principal = {
           AWS = "arn:aws:iam::827327671383:role/jenkins-ec2-role"
         },
         Action = [
-          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetAuthorizationToken", # 🔥 ADD THIS
           "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
           "ecr:InitiateLayerUpload",
           "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:PutImage"
+          "ecr:CompleteLayerUpload"
         ]
       }
     ]
   })
 }
-
-
