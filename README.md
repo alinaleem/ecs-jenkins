@@ -11,6 +11,8 @@ This project provisions an **ECS Cluster (EC2 launch type)** running a **Dockeri
 
 ## 🧱 Architecture
 
+![Architecture](./images/Architecture.webp)
+
 ```
                        ┌────────────────────────┐
                        │   GitHub Repo          │
