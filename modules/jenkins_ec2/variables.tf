@@ -3,3 +3,17 @@ variable "iam_instance_profile" {
   type        = string
   default     = null
 }
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = string
+}
+
+variable "subnets" {
+  description = "List of public subnet IDs"
+  type        = list(string)
+}
+
+variable "key_name" {
+  description = "EC2 key pair name"
+  type        = string
+}

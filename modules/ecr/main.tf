@@ -23,7 +23,7 @@ resource "aws_ecr_repository_policy" "jenkins_push_policy" {
           AWS = "arn:aws:iam::827327671383:role/jenkins-ec2-role"
         },
         Action = [
-          "ecr:GetAuthorizationToken", # 🔥 ADD THIS
+          "ecr:GetAuthorizationToken", 
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability",
           "ecr:PutImage",

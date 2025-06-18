@@ -1,18 +1,3 @@
-variable "subnets" {
-  description = "Public subnets to attach to ALB"
-  type        = list(string)
-}
-
-variable "vpc_id" {
-  description = "VPC ID"
-  type        = string
-}
-
-variable "security_group_id" {
-  description = "Security group for ALB"
-  type        = string
-}
-
 resource "aws_lb" "main" {
   name               = "hello-world-alb"
   internal           = false
@@ -56,14 +41,3 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-output "alb_dns" {
-  value = aws_lb.main.dns_name
-}
-
-output "target_group_arn" {
-  value = aws_lb_target_group.app.arn
-}
-
-output "lb_listener" {
-  value = aws_lb_listener.http
-}

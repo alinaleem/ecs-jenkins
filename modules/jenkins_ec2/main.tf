@@ -1,17 +1,4 @@
-variable "vpc_id" {
-  description = "VPC ID"
-  type        = string
-}
 
-variable "subnets" {
-  description = "List of public subnet IDs"
-  type        = list(string)
-}
-
-variable "key_name" {
-  description = "EC2 key pair name"
-  type        = string
-}
 
 resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins-sg"
@@ -76,10 +63,3 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-output "jenkins_public_ip" {
-  value = aws_instance.jenkins.public_ip
-}
-
-output "jenkins_sg_id" {
-  value = aws_security_group.jenkins_sg.id
-}

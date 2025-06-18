@@ -40,7 +40,7 @@ This project provisions an **ECS Cluster (EC2 launch type)** running a **Dockeri
 ### 1️⃣ Clone the Repo
 
 ```bash
-git clone https://github.com/ali-intervest/ecs-jenkins.git
+git clone https://github.com/alinaleem/ecs-jenkins.git
 cd ecs-jenkins
 ```
 
@@ -94,4 +94,4 @@ terraform destroy -auto-approve
 
 ## 📬 Contact
 
-Made with ❤️ by [@ali-intervest](https://github.com/ali-intervest)
+Made with ❤️ by [@alinaleem](https://github.com/alinaleem)
