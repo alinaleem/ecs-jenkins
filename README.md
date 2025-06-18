@@ -1,97 +1,82 @@
-# 📦 ECS-Jenkins Hello World App Deployment (EC2 Launch Type)
+# 📦 ECS-Jenkins Hello World App (EC2 Launch Type)
 
-This project provisions an **ECS Cluster (EC2 launch type)** running a **Dockerized Python app** using:
+This project provisions an **ECS Cluster (EC2 launch type)** that runs a **Dockerized Python app** with full CI/CD automation using **Jenkins**, **Terraform**, and **AWS ECS**.
 
-- ✅ **Terraform** (Infrastructure as Code)
-- 🚀 **Amazon ECS**
-- 🏗️ **EC2 instances**
-- 📦 **ECR** (for storing container images)
-- ⚙️ **Application Load Balancer (ALB)**
-- 🤖 **Jenkins** for CI/CD automation
+---
 
-## 🧱 Architecture
+## 🧰 Tech Stack
+
+- ⚙️ **Terraform** – Infrastructure as Code
+- 🐳 **Docker** – App containerization
+- 🚀 **Amazon ECS (EC2)** – Container orchestration
+- 📦 **Amazon ECR** – Image storage
+- 🔧 **Application Load Balancer** – Routing
+- 🤖 **Jenkins** – CI/CD automation
+
+---
+
+## 🏗️ Architecture
 
 ![AWS Architecture Diagram](./images/Architecture.webp)
 
+---
 
-## 🛠️ Components
+## 🔨 Key Components
 
-### 📁 Terraform Modules
+- **Terraform Modules**:
+  - VPC, ECS Cluster, ALB, IAM, ASG
+- **hello-world-app/**:
+  - Python app, Dockerfile, Jenkinsfile
+- **Jenkins Pipeline**:
+  - Clones repo → Builds image → Pushes to ECR → Updates ECS
 
-- **VPC**: Subnets, Internet Gateway, Route Tables
-- **ALB**: Listener + Target Group
-- **ECS Cluster**: EC2 launch type
-- **Auto Scaling Group**: Launch template with ECS user-data
-- **IAM Roles**: ECS instance role and service role
-
-### 🐳 Docker
-
-- `hello-world-app/`: Python app with Dockerfile
-- Built via Jenkins, tagged as `:latest` or `${BUILD_NUMBER}`
-
-### 🤖 Jenkins
-
-- Builds Docker image
-- Pushes to ECR
-- Deploys via `aws ecs update-service`
+---
 
 ## 🚀 How to Deploy
-
-### 1️⃣ Clone the Repo
 
 ```bash
 git clone https://github.com/alinaleem/ecs-jenkins.git
 cd ecs-jenkins
-```
-
-### 2️⃣ Initialize Terraform
-
-```bash
-cd terraform/
 terraform init
-```
-
-### 3️⃣ Apply the Infra
-
-```bash
 terraform apply -auto-approve
 ```
 
-> Outputs include ALB DNS and ECS cluster name
+> Output will include your ALB DNS URL
 
-## 🧪 Access the App
+---
 
-After deployment:
+## 🌐 Access the App
 
 ```bash
 curl http://<ALB_DNS>
 ```
 
-Or open in browser:
+Or open:
 
 ```
-http://<your-alb-dns>.amazonaws.com
+http://<alb-dns>.amazonaws.com
 ```
 
-## 🔄 Jenkins CI/CD
+---
 
-1. Jenkins clones from GitHub
-2. Builds and tags Docker image (`hello-world-app`)
-3. Pushes to ECR
-4. Deploys to ECS via `aws ecs update-service`
+## 🔄 CI/CD Flow
 
-## 🧹 Cleanup
+1. Jenkins clones the GitHub repo
+2. Builds & tags Docker image
+3. Pushes to Amazon ECR
+4. Updates ECS Service using `aws ecs update-service`
+
+---
+
+## 🧹 Teardown
 
 ```bash
 terraform destroy -auto-approve
 ```
 
-## 🧾 Notes
+---
 
-- ECS AMI fetched via SSM `/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id`
-- User-data ensures ECS agent starts and joins the cluster
-- Ensure IAM roles have `AmazonEC2ContainerServiceforEC2Role` and ECR access policies
+## 🙋‍♂️ Author
 
-## 📬 Contact
-
-Made with ❤️ by [@alinaleem](https://github.com/alinaleem)
+Made with ❤️ by [@alinaleem](https://github.com/alinaleem)  
+Let’s connect on [LinkedIn](https://linkedin.com/in/alinaleem)
