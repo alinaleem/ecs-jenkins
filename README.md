@@ -10,7 +10,7 @@ This project provisions an **ECS Cluster (EC2 launch type)** that runs a **Docke
 - 🐳 **Docker** – App containerization
 - 🚀 **Amazon ECS (EC2)** – Container orchestration
 - 📦 **Amazon ECR** – Image storage
-- 🔧 **Application Load Balancer** – Routing
+- 🔧 **Application Load Balancer (ALB)** – Routing
 - 🤖 **Jenkins** – CI/CD automation
 
 ---
@@ -18,6 +18,59 @@ This project provisions an **ECS Cluster (EC2 launch type)** that runs a **Docke
 ## 🏗️ Architecture
 
 ![AWS Architecture Diagram](./images/Architecture.webp)
+
+---
+
+## 🔧 AWS Services Used
+
+| Service                      | Purpose                                                                 |
+|------------------------------|-------------------------------------------------------------------------|
+| **EC2**                      | Hosts Jenkins for running the CI/CD pipeline                            |
+| **ECS (EC2 Launch Type)**    | Runs the Dockerized application as a container                          |
+| **ECR (Elastic Container Registry)** | Stores Docker images built by Jenkins                                 |
+| **ALB (Application Load Balancer)** | Routes incoming traffic to the ECS service                             |
+| **IAM**                      | Grants permissions to EC2, ECS, and Jenkins to interact with AWS safely |
+| **VPC**                      | Provides networking layer (subnets, IGW, routing)                        |
+| **Auto Scaling Group (ASG)** | Ensures ECS container instances are available and scalable              |
+
+---
+
+## 🏗️ Architecture Explained
+
+### 1. Infrastructure Provisioning (via Terraform)
+
+Your modularized Terraform setup provisions all the components needed to host your containerized app:
+
+- **VPC Module** – Creates subnets, internet gateway, routing
+- **Security Groups (SG)** – Opens necessary ports (e.g., 80, 8080, 22)
+- **IAM Module** – Creates IAM roles for EC2 and ECS
+- **Jenkins EC2 Module** – Launches an EC2 instance with Jenkins installed
+- **ECR Module** – Creates a private Docker image repository
+- **ECS Module** – Provisions an ECS cluster using EC2 launch type
+- **ECS Instances Module** – Launch templates + ASG for ECS container instances
+- **ALB Module** – Creates an ALB to route traffic to the ECS service
+
+---
+
+### 2. CI/CD Workflow (via Jenkins Pipeline)
+
+1. Developer pushes code to GitHub
+2. Jenkins (on EC2) detects the change
+3. Jenkins pipeline:
+   - Clones the repo
+   - Builds Docker image from `hello-world-app/Dockerfile`
+   - Tags and pushes image to ECR
+   - Triggers ECS service update via `aws ecs update-service`
+4. ECS service pulls the new image and deploys
+5. ALB routes user traffic to the new ECS task
+
+---
+
+### 🌐 Access Flow
+
+```
+[User] → [ALB] → [ECS Service] → [Dockerized App in EC2 Container Instance]
+```
 
 ---
 
