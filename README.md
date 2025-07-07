@@ -1,4 +1,4 @@
-# 📦 ECS-Jenkins Hello World App (EC2 Launch Type)
+# 📦 Terraform deployed - ECS-Jenkins Hello World App (EC2 Launch Type)
 
 This project provisions an **ECS Cluster (EC2 launch type)** that runs a **Dockerized Python app** with full CI/CD automation using **Jenkins**, **Terraform**, and **AWS ECS**.
 
